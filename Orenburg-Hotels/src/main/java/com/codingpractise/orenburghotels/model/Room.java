@@ -1,14 +1,19 @@
 package com.codingpractise.orenburghotels.model;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +34,9 @@ public class Room {
 	private BigDecimal roomPrice;
 
 	private boolean isBooked = false;
+	
+	@Lob
+	private Blob photo;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<BookedRoom> bookings;
@@ -44,6 +52,10 @@ public class Room {
 		}
 		bookings.add(booking);
 		booking.setRoom(this);
+		isBooked = true;
+		String bookingCode = RandomStringUtils.randomNumeric(10);//count
+		booking.setBookingConfirmationCode(bookingCode);
+		
 	}
 
 }
